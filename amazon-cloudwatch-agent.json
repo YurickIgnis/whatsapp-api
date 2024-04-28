@@ -1,0 +1,54 @@
+{
+    "metrics": {
+        "append_dimensions": {
+            "AutoScalingGroupName": "${aws:AutoScalingGroupName}",
+            "ImageId": "${aws:ImageId}",
+            "InstanceId": "${aws:InstanceId}",
+            "InstanceType": "${aws:InstanceType}"
+        },
+        "metrics_collected": {
+            "statsd": {
+                "service_address": ":8125",
+                "metrics_collection_interval": 10
+            },
+            "collectd": {
+                "metrics_aggregation_interval": 60
+            },
+            "cpu": {
+                "measurement": [
+                    {"Name": "cpu_usage_idle", "Unit": "Percent"},
+                    {"Name": "cpu_usage_iowait", "Unit": "Percent"},
+                    {"Name": "cpu_usage_user", "Unit": "Percent"},
+                    {"Name": "cpu_usage_system", "Unit": "Percent"}
+                ],
+                "metrics_collection_interval": 60,
+                "resources": [
+                    "*"
+                ]
+            },
+            "disk": {
+                "measurement": [
+                    {"Name": "disk_used_percent", "Unit": "Percent"}
+                ],
+                "metrics_collection_interval": 60,
+                "resources": [
+                    "/"
+                ]
+            },
+            "mem": {
+                "measurement": [
+                    {"Name": "mem_used_percent", "Unit": "Percent"}
+                ],
+                "metrics_collection_interval": 60
+            },
+            "net": {
+                "measurement": [
+                    {"Name": "bytes_in", "Unit": "Bytes"},
+                    {"Name": "bytes_out", "Unit": "Bytes"}
+                ],
+                "metrics_collection_interval": 60
+            }
+        }
+    }
+}
+

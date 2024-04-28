@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo "Login amazon ECR"
+      - aws --version
+      - export VERSION=v1
+      - echo "$MY_PASSWORD" | docker login --username usidesarrollo --password-stdin
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 642982272653.dkr.ecr.us-east-1.amazonaws.com
+
+  build:
+    commands:
+      - echo Construye la Imagen Docker...
+      - echo "Verificando si ya se ha iniciado sesión en Docker..."
+      - echo "Construyendo imagen Docker..."
+      - docker build --no-cache  -t whatsapp_api:$VERSION --build-arg USER_ID=${USER_ID} --build-arg SECRET_KEY=${SECRET_KEY} .
+      - docker tag whatsapp_api:$VERSION 642982272653.dkr.ecr.us-east-1.amazonaws.com/whatsapp_api:$VERSION
+
+  post_build:
+    commands:
+      - echo Push de la imagen al ECR...
+      - docker push 642982272653.dkr.ecr.us-east-1.amazonaws.com/whatsapp_api:$VERSION
+
+artifacts:
+  files:
+    - Dockerrun.aws.json
+    - .ebextensions/**

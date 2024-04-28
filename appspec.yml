@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/portainer/aplicaciones
+hooks:
+  AfterInstall:
+    - location: deploy.sh
+      runas: portainer

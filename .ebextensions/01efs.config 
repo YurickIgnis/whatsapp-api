@@ -1,0 +1,4 @@
+commands:
+  01_mount_efs:
+    command: "sudo mkdir -p /apps/sessions && sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0958fa2cc71c74fb8.efs.us-east-1.amazonaws.com:/ /apps/sessions"
+    ignoreErrors: true
