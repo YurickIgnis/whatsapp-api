@@ -104,6 +104,45 @@ const statusSession = async (req, res) => {
 }
 
 /**
+ * @route GET /session/active
+ * @group Session - Operations about user sessions
+ * @security JWT
+ * @returns {object} 200 - An array of active sessions
+ * @returns {Error}  default - Unexpected error
+ */
+const listActiveSessions = async (req, res) => {
+  try {
+      const activeSessionsPromises = [];
+
+      sessions.forEach((session, sessionId) => {
+          // Push the promise into the array
+          activeSessionsPromises.push(
+              session.getState().then(state => {
+                  if (state === 'CONNECTED') {
+                      return { sessionId, state };
+                  }
+                  return null; // Filter out later
+              }).catch(error => {
+                  console.error(`Error getting state for session ${sessionId}: ${error}`);
+                  return null; // Filter out sessions that resulted in an error
+              })
+          );
+      });
+
+      // Resolve all promises and filter out nulls
+      const activeSessions = (await Promise.all(activeSessionsPromises)).filter(session => session !== null);
+      
+      res.json({ success: true, sessions: activeSessions });
+  } catch (error) {
+      console.error('listActiveSessions ERROR', error);
+      res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+
+
+
+/**
  * QR code of the session with the given session ID.
  *
  * @function
@@ -321,6 +360,7 @@ const terminateAllSessions = async (req, res) => {
 module.exports = {
   startSession,
   statusSession,
+  listActiveSessions,
   sessionQrCode,
   sessionQrCodeImage,
   terminateSession,

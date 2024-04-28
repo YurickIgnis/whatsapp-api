@@ -43,6 +43,11 @@ sessionRouter.get('/qr/:sessionId/image', middleware.sessionNameValidation, sess
 sessionRouter.get('/terminate/:sessionId', middleware.sessionNameValidation, sessionController.terminateSession)
 sessionRouter.get('/terminateInactive', sessionController.terminateInactiveSessions)
 sessionRouter.get('/terminateAll', sessionController.terminateAllSessions)
+// En routes.js, dentro de la sección de 'sessionRouter'
+// sessionRouter.get('/active', middleware.apikey, sessionController.listActiveSessions);
+sessionRouter.get('/active', middleware.apikey, sessionController.listActiveSessions);
+
+
 
 /**
  * ================
